@@ -3,36 +3,32 @@ import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {getBlogs, allBlogs} from '../../services/django/getblogs';
 import axios from 'axios';
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
 const HomePage = () => {
-    let blogs = "Loading"
+    const [blogs, setBlogs] = useState([]);
     useEffect(()=>{
         fetch('http://localhost:8000/getblogs/', {})
         .then((response) => response.json())
-        .then((data)=>{blogs = [];
-            data.forEach(element => {
-            blogs.concat(<div id={`${element['pk']}`}>
-                <h2>{element['fields']['title']}</h2>
-                <p>{element['fields']['content']}</p>
-            </div>)
-        });});
-        
-    })
-
-    fetch('http://localhost:8000/getblogs/', {}).then((response) => response.json()).then((data) => {
-        console.log(data);
-        let a = ""
-        data.forEach(element => {
-            a += `<div><h1>${element['fields']['title']}</h1><br>${element['fields']['content']}</div>`
+        .then((data)=>{
+            setBlogs(data);
         });
-        document.getElementById('blogs').innerHTML = a;
-        // if (document.getElementById('blogs').innerHTML !== ""){data.forEach(element => {
-        //     document.getElementById('blogs').innerHTML += `${element['pk']}`
-        // });}
-    });
+    },[]);
     return(
         <div>
             <h1>Home Page</h1>
-            <div id='blogs'>{blogs}</div>
+            <div id='blogs'>{blogs.map((blog)=>{
+                return(
+                    <div key={blog['pk']}>
+                        <h2>{blog['fields']['title']}</h2>
+                        <p>{blog['fields']['content']}</p>
+                    </div>
+                )
+            })}</div>
         </div>
     )
 }
@@ -83,3 +79,13 @@ export default HomePage;
     // useEffect(() => {
     //     const response = await fetch('http://localhost:8000/getblogs/', {});
     // });
+            // fetch('http://localhost:8000/getblogs/', {}).then((response) => response.json()).then((data) => {
+        // console.log(data);
+        // let a = ""
+        // data.forEach(element => {
+        //     a += `<div><h1>${element['fields']['title']}</h1><br>${element['fields']['content']}</div>`
+        // });
+        // document.getElementById('blogs').innerHTML = a;
+        // if (document.getElementById('blogs').innerHTML !== ""){data.forEach(element => {
+        //     document.getElementById('blogs').innerHTML += `${element['pk']}`
+        // });}
