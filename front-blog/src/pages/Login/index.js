@@ -30,7 +30,7 @@ const LoginPage = () => {
                     document.cookie=`username=${username};secure`;
                     document.cookie=`password=${hashedPassword.hex()};secure`;
                     navigate('/main');
-                    document.location = '/main';
+                    //document.location = '/main';
                 }
                 else {
                     {alert("Invalid Credentials")}

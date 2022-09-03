@@ -56,7 +56,7 @@ def login(request):
     return HttpResponse(json.dumps({"status": "failed"}))
 
 @api_view(['GET'])
-# @permission_classes([AllowAny])
+# @permission_classes([AllowAny])localhost:8000/login/
 def getblogs(request):
     qs = blog.objects.all()
     qs_json = serializers.serialize('json', qs)
