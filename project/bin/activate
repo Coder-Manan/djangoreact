@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/media/manan/DATA/mdg/djangoreact/project"
+VIRTUAL_ENV="/home/manan/Desktop/djangoreact/project"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/media/manan/DATA/mdg/djangoreact/project"
+set -gx VIRTUAL_ENV "/home/manan/Desktop/djangoreact/project"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
