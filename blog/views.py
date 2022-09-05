@@ -48,8 +48,9 @@ def addblog(request):
     pwd = data['password']
     if user == "admin" and pwd == SHA256.new(b"admin").hexdigest():
         if blogdata.is_valid():
-            blogdata.save()
-            return HttpResponse("Blog added successfully")
+            x=blogdata.save()
+            print(x)
+            return HttpResponse('{"content":"'+data['content']+'","title":"'+data['title']+'","pk":"'+str(x)+'"}', content_type="application/json", status=201)
         else:
             return HttpResponse("Invalid data")
     
@@ -87,7 +88,7 @@ def deleteblog(request):
 def updateblog(request):
     data = json.dumps(request.data)
     if ('username' not in data) or ('password' not in data):
-        return HttpResponse("Please enter username and password")
+        return HttpResponse("Please enter username and password", status=400)
     data = json.loads(data)
     user = data['username']
     pwd = data['password']
@@ -95,12 +96,12 @@ def updateblog(request):
         pk = data['pk']
         ublog = blog.objects.filter(pk=pk)
         if (ublog == None):
-            return HttpResponse("Blog not found")
+            return HttpResponse("Blog not found", status=400)
         if (('title' not in data) or ('content' not in data)):
-            return HttpResponse("Invalid data")
+            return HttpResponse("Invalid data", status=400)
         try:
             ublog.update(title=data['title'], content=data['content'])
-            return HttpResponse(serializers.serialize('json', ublog), content_type='application/json')
+            return HttpResponse(serializers.serialize('json', ublog), content_type='application/json', status=200)
         except:
-            return HttpResponse("Error occurred, please try again")
-    return HttpResponse("Unauthorized")
+            return HttpResponse("Error occurred, please try again", status=500)
+    return HttpResponse("Unauthorized", status=401)

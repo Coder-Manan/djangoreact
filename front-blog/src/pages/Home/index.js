@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import {getBlogs, allBlogs} from '../../services/django/getblogs';
 import axios from 'axios';
 import tryLogin from '../../services/django/login';
+import Fields from '../../components/updatefields.js/fields';
+import { Blog } from '../../components/blog';
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -36,9 +39,11 @@ const HomePage = () => {
             <div id='blogs'>{blogs.map((blog)=>{
                 return(
                     <div key={blog['pk']}>
-                        <div id={blog['pk'].toString() + "data"}>
-                            <h2>{blog['fields']['title']}</h2>
-                            <p>{blog['fields']['content']}</p>
+                        <div id={blog['pk'].toString() + "-data"}>
+                            <Blog pk={blog['pk']} title={blog['fields']['title']} content={blog['fields']['content']}></Blog>
+                        </div>
+                        <div id={blog['pk'].toString() + "-update"}>
+                            <Fields pk={blog['pk']}></Fields>
                         </div>
                         <div id={blog['pk'].toString() + "delete"}>
                             <button onClick={async()=>{
@@ -72,9 +77,10 @@ const HomePage = () => {
                         "password": getCookie('password')
                     });
                     console.log(response);
-                    if (response['data'] === 'Blog added successfully') {
+                    if (response.status === 201) {
                         alert("Blog added");
-                        window.location.reload();
+                        console.log((response.data));
+                        setBlogs([...blogs, JSON.parse('{"pk":' + response.data.pk + ',"fields":{"title":"' + title + '","content":"' + content + '"}}')]);
                     }
                     else {
                         alert("Error...\nBlog not added\nTry logging out and in if issue persists");
